@@ -5,6 +5,9 @@ import User from "../modules/User.js";
 
 export const clerkWebhooks = async (req, res) => {
   try {
+    if (!process.env.CLERK_WEBHOOK_SECRET) {
+      console.error("❌ Missing CLERK_WEBHOOK_SECRET in environment variables");
+    }
     const whook = new Webhook(process.env.CLERK_WEBHOOK_SECRET);
     const payload = req.body;
     const evt = await whook.verify(JSON.stringify(req.body), {

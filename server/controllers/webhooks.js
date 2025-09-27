@@ -6,13 +6,13 @@ import User from "../modules/User.js";
 export const clerkWebhooks = async (req, res) => {
   try {
     const whook = new Webhook(process.env.CLERK_WEBHOOK_SECRET);
-    await whook.verify(JSON.stringify(req, body), {
+    await whook.verify(req.body.toString("utf8"), {
       "svix-id": req.headers["svix-id"],
       "svix-timestamp": req.headers["svix-timestamp"],
       "svix-signature": req.headers["svix-signature"],
     });
 
-    const { data, type } = req.body;
+    const { data, type } = req.body.toString("utf8");
 
     switch (type) {
       case "user.created": {
@@ -20,7 +20,7 @@ export const clerkWebhooks = async (req, res) => {
           _id: data.id,
           email: data.email_addresses[0].email_address,
           name: data.first_name + "" + data.last_name,
-          ImageUrl: data.image_url,
+          imageUrl: data.image_url,
         };
         await User.create(userData);
         res.json({});
@@ -28,7 +28,7 @@ export const clerkWebhooks = async (req, res) => {
       }
       case "user.updated": {
         const userData = {
-          email: data.email_address[0].email_address,
+          email: data.email_addresses[0].email_address,
           name: data.first_name + "" + data.last_name,
           imageUrl: data.image_url,
         };

@@ -5,6 +5,13 @@ import User from "../modules/User.js";
 
 export const clerkWebhooks = async (req, res) => {
   try {
+    console.log("Received webhook:", req.body);
+    await User.create({
+      _id: "12345",
+      name: "test",
+      email: "man@gami.com",
+      imageUrl: "test and test",
+    });
     if (!process.env.CLERK_WEBHOOK_SECRET) {
       console.error("❌ Missing CLERK_WEBHOOK_SECRET in environment variables");
       return res

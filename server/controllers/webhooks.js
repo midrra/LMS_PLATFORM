@@ -30,6 +30,7 @@ export const clerkWebhooks = async (req, res) => {
     // const { data, type } = evt;
     // console.log("Webhook verified:", type, data.id);
 
+    const { data, type } = req.body;
     switch (type) {
       case "user.created": {
         const userData = {

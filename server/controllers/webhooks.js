@@ -20,17 +20,19 @@ export const clerkWebhooks = async (req, res) => {
     // }
     // const whook = new Webhook(process.env.CLERK_WEBHOOK_SECRET);
 
-    // const payload = req.body.toString("utf8");
-    // const evt = whook.verify(payload, {
-    //   "svix-id": req.headers["svix-id"],
-    //   "svix-timestamp": req.headers["svix-timestamp"],
-    //   "svix-signature": req.headers["svix-signature"],
-    // });
+    //const payload = req.body.toString("utf8");
 
-    // const { data, type } = evt;
-    // console.log("Webhook verified:", type, data.id);
+    const headers = {
+      "svix-id": req.headers["svix-id"],
+      "svix-timestamp": req.headers["svix-timestamp"],
+      "svix-signature": req.headers["svix-signature"],
+    };
 
-    const { data, type } = req.body.toString("utf8");
+    const wh = new Webhook(process.env.CLERK_WEBHOOK_SECRET);
+    const evt = wh.verify(payload, headers);
+
+    const { type, data } = evt;
+
     switch (type) {
       case "user.created": {
         const userData = {

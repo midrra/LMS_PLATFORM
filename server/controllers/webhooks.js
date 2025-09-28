@@ -5,30 +5,30 @@ import User from "../modules/User.js";
 
 export const clerkWebhooks = async (req, res) => {
   try {
-    console.log("Received webhook:", req.body);
-    await User.create({
-      _id: "12345",
-      name: "test",
-      email: "man@gami.com",
-      imageUrl: "test and test",
-    });
-    if (!process.env.CLERK_WEBHOOK_SECRET) {
-      console.error("❌ Missing CLERK_WEBHOOK_SECRET in environment variables");
-      return res
-        .status(500)
-        .json({ success: false, message: "Server configuration error" });
-    }
-    const whook = new Webhook(process.env.CLERK_WEBHOOK_SECRET);
+    // console.log("Received webhook:", req.body);
+    // await User.create({
+    //   _id: "12345",
+    //   name: "test",
+    //   email: "man@gami.com",
+    //   imageUrl: "test and test",
+    // });
+    // if (!process.env.CLERK_WEBHOOK_SECRET) {
+    //   console.error("❌ Missing CLERK_WEBHOOK_SECRET in environment variables");
+    //   return res
+    //     .status(500)
+    //     .json({ success: false, message: "Server configuration error" });
+    // }
+    // const whook = new Webhook(process.env.CLERK_WEBHOOK_SECRET);
 
-    const payload = req.body.toString("utf8");
-    const evt = whook.verify(payload, {
-      "svix-id": req.headers["svix-id"],
-      "svix-timestamp": req.headers["svix-timestamp"],
-      "svix-signature": req.headers["svix-signature"],
-    });
+    // const payload = req.body.toString("utf8");
+    // const evt = whook.verify(payload, {
+    //   "svix-id": req.headers["svix-id"],
+    //   "svix-timestamp": req.headers["svix-timestamp"],
+    //   "svix-signature": req.headers["svix-signature"],
+    // });
 
-    const { data, type } = evt;
-    console.log("Webhook verified:", type, data.id);
+    // const { data, type } = evt;
+    // console.log("Webhook verified:", type, data.id);
 
     switch (type) {
       case "user.created": {

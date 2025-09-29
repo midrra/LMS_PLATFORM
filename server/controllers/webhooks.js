@@ -11,7 +11,6 @@ export const clerkWebhooks = async (req, res) => {
         .status(500)
         .json({ success: false, message: "Server configuration error" });
     }
-    const whook = new Webhook(process.env.CLERK_WEBHOOK_SECRET);
 
     const payload = req.body.toString("utf8");
 

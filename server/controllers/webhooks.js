@@ -5,22 +5,15 @@ import User from "../modules/User.js";
 
 export const clerkWebhooks = async (req, res) => {
   try {
-    console.log("Received webhook:", req.body);
-    await User.create({
-      _id: "50",
-      name: "tonis",
-      email: "tonis@gami.com",
-      imageUrl: "tonis and tonis",
-    });
-    // if (!process.env.CLERK_WEBHOOK_SECRET) {
-    //   console.error("❌ Missing CLERK_WEBHOOK_SECRET in environment variables");
-    //   return res
-    //     .status(500)
-    //     .json({ success: false, message: "Server configuration error" });
-    // }
-    // const whook = new Webhook(process.env.CLERK_WEBHOOK_SECRET);
+    if (!process.env.CLERK_WEBHOOK_SECRET) {
+      console.error("❌ Missing CLERK_WEBHOOK_SECRET in environment variables");
+      return res
+        .status(500)
+        .json({ success: false, message: "Server configuration error" });
+    }
+    const whook = new Webhook(process.env.CLERK_WEBHOOK_SECRET);
 
-    //const payload = req.body.toString("utf8");
+    const payload = req.body.toString("utf8");
 
     const headers = {
       "svix-id": req.headers["svix-id"],
@@ -32,6 +25,14 @@ export const clerkWebhooks = async (req, res) => {
     const evt = wh.verify(payload, headers);
 
     const { type, data } = evt;
+
+    console.log("Received webhook:", req.body);
+    await User.create({
+      _id: "50",
+      name: "tonis",
+      email: "tonis@gami.com",
+      imageUrl: "tonis and tonis",
+    });
 
     switch (type) {
       case "user.created": {

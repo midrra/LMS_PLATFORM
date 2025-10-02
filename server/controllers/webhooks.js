@@ -5,27 +5,17 @@ import User from "../modules/User.js";
 
 export const clerkWebhooks = async (req, res) => {
   try {
-    const payload = req.body.toString("utf8");
+    const whook = new Webhook(process.env.CLERK_WEBHOOK_SECRET);
+    const payload = req.body;
 
-    const headers = {
+    await whook.verify(JSON.stringify(req.body), {
       "svix-id": req.headers["svix-id"],
       "svix-timestamp": req.headers["svix-timestamp"],
       "svix-signature": req.headers["svix-signature"],
-    };
-
-    const wh = new Webhook(process.env.CLERK_WEBHOOK_SECRET);
-    const evt = wh.verify(payload, headers);
-
-    const { type, data } = evt;
-
-    await User.create({
-      _id: "50",
-      name: "tonis",
-      email: "tonis@gami.com",
-      imageUrl: "tonis and tonis",
     });
 
-    console.log("Received webhook:", req.body);
+    const { data, type } = req.body;
+
     switch (type) {
       case "user.created": {
         const userData = {
